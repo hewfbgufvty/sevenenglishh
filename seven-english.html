@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seven English - دانلود و تأیید مدرک</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(120deg, #f6f8ff, #e9f0f9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 560px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 40px 30px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c55a0;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: #1e40af;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Vazirmatn', sans-serif;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #4c84ff;
+      box-shadow: 0 0 0 3px rgba(76, 132, 255, 0.2);
+    }
+
+    button {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(to right, #4c84ff, #3a6ed4);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      box-shadow: 0 4px 10px rgba(76, 132, 255, 0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #3a6ed4, #2c55a0);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button[disabled] {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      min-height: 20px;
+    }
+
+    .success {
+      color: #16a085;
+      background-color: #d1f7ea;
+      border: 1px solid #a8e6c9;
+    }
+
+    .error {
+      color: #c0392b;
+      background-color: #fadbd9;
+      border: 1px solid #f1a8a0;
+    }
+
+    #certificateImage {
+      width: 100%;
+      max-width: 320px;
+      margin: 15px auto;
+      border-radius: 12px;
+      display: none;
+      border: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo">گروه آموزشی سون انگلیش</div>
+    <div class="tagline">مرکز آموزش زبان انگلیسی</div>
+
+    <!-- دانلود مدرک -->
+    <div class="section">
+      <h2>📥 دانلود مدرک</h2>
+      <p>کد ملی خود را وارد کنید.</p>
+      <input type="text" id="nationalId" placeholder="مثلاً: 0123456789" maxlength="10" />
+      <button id="downloadBtn" disabled onclick="downloadCertificate()">دریافت مدرک</button>
+      <div id="downloadResult" class="result"></div>
+      <img id="certificateImage" alt="مدرک" />
+    </div>
+
+    <!-- تأیید اصالت -->
+    <div class="section">
+      <h2>✅ تأیید اصالت مدرک</h2>
+      <p>کد تأیید مدرک را وارد کنید.</p>
+      <input type="text" id="verifyCode" placeholder="مثلاً: 59364586" />
+      <button onclick="verifyCertificate()">بررسی اصالت</button>
+      <div id="verifyResult" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ لیست دانشجویان - اینجا می‌تونی اضافه/کم کنی
+    const students = [
+      { nationalId: "0027646432", certCode: "84963286", name: "رها قاسمی", gender: "female" },
+      { nationalId: "1234567890", certCode: "SE-1002", name: "امیررضا حسینی", gender: "male" },
+      { nationalId: "0987654321", certCode: "SE-1003", name: "سارا محمدی", gender: "female" },
+      { nationalId: "1111111111", certCode: "SE-1004", name: "محمد رضایی", gender: "male" },
+      { nationalId: "2222222222", certCode: "SE-1005", name: "نگین احمدی", gender: "female" },
+      { nationalId: "3333333333", certCode: "SE-1006", name: "علی موسوی", gender: "male" },
+      { nationalId: "4444444444", certCode: "SE-1007", name: "زهرا کریمی", gender: "female" },
+      { nationalId: "5555555555", certCode: "SE-1008", name: "مصطفی فتحی", gender: "male" },
+      { nationalId: "6666666666", certCode: "SE-1009", name: "فاطمه نوری", gender: "female" },
+      { nationalId: "7777777777", certCode: "SE-1010", name: "حسین رمضانی", gender: "male" },
+      { nationalId: "8888888888", certCode: "SE-1011", name: "الناز شریفی", gender: "female" },
+      { nationalId: "9999999999", certCode: "SE-1012", name: "کیوان اکبری", gender: "male" },
+      { nationalId: "1010101010", certCode: "SE-1013", name: "مهسا طاهری", gender: "female" },
+      { nationalId: "1212121212", certCode: "SE-1014", name: "فریدون جعفری", gender: "male" },
+      { nationalId: "1313131313", certCode: "SE-1015", name: "سارینا وکیلی", gender: "female" }
+    ];
+
+    // 🔗 لینک تصویر مدرک (همه مدارک یک قالب دارن)
+    const CERTIFICATE_TEMPLATE_URL = "https://i.imgur.com/5W4K3qL.png"; // ← اینجا لینک تصویر مدرک خودت رو بذار
+
+    // --- تابع دانلود مدرک ---
+    function downloadCertificate() {
+      const nationalId = document.getElementById("nationalId").value.trim();
+      const result = document.getElementById("downloadResult");
+      const img = document.getElementById("certificateImage");
+
+      // پاک کردن نتیجه قبلی
+      result.className = "result";
+      result.textContent = "";
+      img.style.display = "none";
+
+      // پیدا کردن دانشجو
+      const student = students.find(s => s.nationalId === nationalId);
+
+      if (student) {
+        const title = student.gender === "female" ? "سرکار خانم" : "آقای";
+        result.textContent = `✅ این مدرک اصالت دارد و متعلق به ${title} ${student.name} با کد ملی ${student.nationalId} می‌باشد.`;
+        result.className = "result success";
+
+        // نمایش تصویر
+        img.src = CERTIFICATE_TEMPLATE_URL;
+        img.style.display = "block";
+
+        // دانلود خودکار
+        const a = document.createElement('a');
+        a.href = CERTIFICATE_TEMPLATE_URL;
+        a.download = `مدرک-${student.name}-${student.nationalId}.png`;
+        a.click();
+      } else {
+        result.textContent = "❌ کد ملی یافت نشد. لطفاً مجدداً بررسی کنید.";
+        result.className = "result error";
+      }
+    }
+
+    // --- تابع تأیید اصالت ---
+    function verifyCertificate() {
+      const code = document.getElementById("verifyCode").value.trim().toUpperCase();
+      const result = document.getElementById("verifyResult");
+
+      result.className = "result";
+      result.textContent = "";
+
+      const student = students.find(s => s.certCode.toUpperCase() === code);
+
+      if (student) {
+        const title = student.gender === "female" ? "سرکار خانم" : "آقای";
+        result.textContent = `✅ این مدرک اصالت دارد و متعلق به ${title} ${student.name} با کد ملی ${student.nationalId} می‌باشد.`;
+        result.className = "result success";
+      } else {
+        result.textContent = "❌ این کد مدرک معتبر نیست یا در سیستم وجود ندارد.";
+        result.className = "result error";
+      }
+    }
+
+    // فعال/غیرفعال کردن دکمه دانلود
+    document.getElementById("nationalId").addEventListener("input", function () {
+      const btn = document.getElementById("downloadBtn");
+      if (this.value.length === 10) {
+        btn.disabled = false;
+      } else {
+        btn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
